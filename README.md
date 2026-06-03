@@ -42,7 +42,7 @@ sudo apt install --install-recommends winehq-stable
 # Download Comet from perplexity.ai/comet and install it in ~/.wine
 
 # Clone and run
-git clone https://github.com/YOUR_USER/comet-wine.git
+git clone github.com/AbdurRahman-cybersec/Perplexity-Comet-in-Linux-Wine
 cd comet-wine
 ./comet
 ```
