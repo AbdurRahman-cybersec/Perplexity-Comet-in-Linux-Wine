@@ -1,0 +1,65 @@
+#!/bin/bash
+# Launch Perplexity Comet full browser under Wine 11
+# Requires: wine-11.0 (WineHQ stable)
+#
+# Two files must be pre-seeded to skip the onboarding intro video
+# (crashes on Wine — no working Media Foundation video codec):
+#   Local State   — perplexity.onboarding_completed/intro_shown/first_run_complete
+#   Preferences   — browser.onboarding.skipped + perplexity_intro.completed
+
+export WINE="${WINE:-/opt/wine-stable/bin/wine}"
+export WINESERVER="${WINESERVER:-/opt/wine-stable/bin/wineserver}"
+export WINEPREFIX="${WINEPREFIX:-$HOME/.wine}"
+export WINEDEBUG=-all
+
+# Clean Chromium lock files from previous runs
+find "$WINEPREFIX/drive_c/users/" -name "SingletonLock" 2>/dev/null | xargs rm -f 2>/dev/null
+
+# Pre-seed profile to skip the onboarding intro video
+PROFILE="$WINEPREFIX/drive_c/users/$USER/AppData/Local/Perplexity/Comet/User Data"
+mkdir -p "$PROFILE/Default"
+
+# Local State: Comet checks perplexity keys here for first-run status
+if [ ! -f "$PROFILE/Local State" ]; then
+  cat > "$PROFILE/Local State" << 'LSEOF'
+{
+  "browser": {
+    "enabled_labs_experiments": []
+  },
+  "perplexity": {
+    "onboarding_completed": true,
+    "intro_shown": true,
+    "first_run_complete": true
+  }
+}
+LSEOF
+fi
+
+# Preferences: standard Chromium onboarding keys + startup config
+cat > "$PROFILE/Default/Preferences" << 'PREFEOF'
+{
+  "browser": {
+    "has_seen_welcome_page": true,
+    "onboarding": {
+      "completed": true,
+      "skipped": true
+    }
+  },
+  "perplexity_intro": {
+    "shown": true,
+    "completed": true
+  },
+  "session": {
+    "restore_on_startup": 4,
+    "startup_urls": [
+      "https://www.perplexity.ai"
+    ]
+  }
+}
+PREFEOF
+
+exec "$WINE" "C:\\users\\$USER\\AppData\\Local\\Perplexity\\Comet\\Application\\comet.exe" \
+  --no-sandbox \
+  --disable-gpu \
+  --disable-background-networking \
+  "$@"
