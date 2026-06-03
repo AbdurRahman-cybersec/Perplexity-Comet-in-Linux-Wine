@@ -19,6 +19,7 @@ Two ingredients:
 
 - Wine 11 stable (WineHQ)
 - `cabextract` (for winetricks codec install, optional)
+- https://www.perplexity.ai/comet - Download Comet Executable.
 
 ## File Attached - Analysis
 **URL**: https://www.virustotal.com/gui/file/24b76e0cb7af695f33f5caeba2fd5e34cdeb135093e05749afffee4082b6b0e3/details
