@@ -1,0 +1,44 @@
+#!/bin/bash
+# comet-wine — Run Perplexity Comet browser on Linux under Wine 11
+# https://github.com/YOUR_USER/comet-wine
+
+export WINE=${WINE:-/opt/wine-stable/bin/wine}
+export WINESERVER=${WINESERVER:-/opt/wine-stable/bin/wineserver}
+export WINEPREFIX="${WINEPREFIX:-$HOME/.wine}"
+export WINEDEBUG=-all
+
+# Clean Chromium lock files from previous runs
+find "$WINEPREFIX/drive_c/users/" -name "SingletonLock" 2>/dev/null | xargs rm -f 2>/dev/null
+
+# Pre-seed profile to skip onboarding video (crashes on Wine — no Media Foundation codecs)
+PROFILE="$WINEPREFIX/drive_c/users/$USER/AppData/Local/Perplexity/Comet/User Data"
+mkdir -p "$PROFILE/Default"
+
+if [ ! -f "$PROFILE/Default/Preferences" ]; then
+  cat > "$PROFILE/Default/Preferences" << 'PREFEOF'
+{
+  "browser": {
+    "has_seen_welcome_page": true,
+    "onboarding": {
+      "completed": true,
+      "skipped": true
+    }
+  },
+  "perplexity_intro": {
+    "shown": true,
+    "completed": true
+  },
+  "session": {
+    "restore_on_startup": 4,
+    "startup_urls": [
+      "https://www.perplexity.ai"
+    ]
+  }
+}
+PREFEOF
+fi
+
+exec "$WINE" "C:\\users\\$USER\\AppData\\Local\\Perplexity\\Comet\\Application\\comet.exe" \
+  --no-sandbox \
+  --disable-gpu \
+  "$@"
