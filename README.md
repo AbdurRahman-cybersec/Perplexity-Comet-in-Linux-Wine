@@ -20,6 +20,19 @@ Two ingredients:
 - Wine 11 stable (WineHQ)
 - `cabextract` (for winetricks codec install, optional)
 
+## File Attached - Analysis
+**URL**: https://www.virustotal.com/gui/file/24b76e0cb7af695f33f5caeba2fd5e34cdeb135093e05749afffee4082b6b0e3/details
+
+**File Name**: comet_installer_latest.exe
+
+**MD5**: de44b07c8cdc84f03df851e22226e5fa
+ 
+**SHA-1**: 3ed1cfb115319b5861b8d60b8c033e21e5318b42
+ 
+**SHA-256**: 24b76e0cb7af695f33f5caeba2fd5e34cdeb135093e05749afffee4082b6b0e3
+
+**Verdict**: 0/69
+
 ## Quick start
 
 ```bash
